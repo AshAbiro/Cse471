@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-sand text-ink;
+}
+
+.section {
+  @apply max-w-6xl mx-auto px-4 md:px-6 py-10;
+}
+
+.btn-primary {
+  @apply bg-coral text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition;
+}
+
+.btn-ghost {
+  @apply border border-ink text-ink px-4 py-2 rounded-lg font-semibold hover:bg-ink hover:text-sand transition;
+}
+
+.card {
+  @apply bg-white rounded-2xl shadow-sm border border-sand/60;
+}
+
+.badge {
+  @apply inline-flex items-center px-2 py-1 text-xs rounded-full bg-teal/10 text-teal;
+}
