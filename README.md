@@ -75,6 +75,13 @@ Your API base URL will be:
 
 `https://<your-backend-project>.vercel.app/api`
 
+If you deploy from repository root, this repo now includes root-level Flask entry files:
+- `app.py`
+- `requirements.txt`
+- `vercel.json`
+
+So Vercel can still detect and run the Flask backend.
+
 ## Connect frontend to Flask backend
 
 In `client/.env` set:
