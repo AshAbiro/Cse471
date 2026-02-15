@@ -68,15 +68,46 @@ MONGO_URI = os.getenv("MONGO_URI", "")
 JWT_SECRET = os.getenv("JWT_SECRET", "change_this_secret")
 MONGO_DB = os.getenv("MONGO_DB") or resolve_db_name(MONGO_URI, "niche-city-tour")
 
-mongo = MongoClient(MONGO_URI)
-db = mongo[MONGO_DB]
-users_col = db["users"]
-tours_col = db["tours"]
-bookings_col = db["bookings"]
-reviews_col = db["reviews"]
+mongo = None
+db = None
+users_col = None
+tours_col = None
+bookings_col = None
+reviews_col = None
 
 app = Flask(__name__)
 CORS(app)
+
+
+def ensure_db():
+    global mongo, db, users_col, tours_col, bookings_col, reviews_col
+    if users_col is not None:
+        return None
+    if not MONGO_URI:
+        return "MONGO_URI is missing"
+    try:
+        mongo = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+        mongo.admin.command("ping")
+        db = mongo[MONGO_DB]
+        users_col = db["users"]
+        tours_col = db["tours"]
+        bookings_col = db["bookings"]
+        reviews_col = db["reviews"]
+        return None
+    except Exception as exc:
+        return str(exc)
+
+
+@app.before_request
+def db_guard():
+    if request.path == "/api/health":
+        return None
+    if not request.path.startswith("/api/"):
+        return None
+    error = ensure_db()
+    if error:
+        return jsonify({"message": "Database connection failed", "detail": error}), 500
+    return None
 
 
 def auth_required(*roles):
