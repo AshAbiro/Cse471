@@ -174,6 +174,17 @@ def health():
     return jsonify({"status": "ok"})
 
 
+@app.get("/")
+def root():
+    return jsonify(
+        {
+            "service": "Dhaka Tours API",
+            "status": "ok",
+            "health": "/api/health",
+        }
+    )
+
+
 @app.post("/api/auth/register")
 def register():
     data = request.get_json(silent=True) or {}
